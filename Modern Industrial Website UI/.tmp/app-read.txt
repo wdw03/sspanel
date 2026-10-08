@@ -1,0 +1,896 @@
+[/workspaces/default/code/src/App.tsx#62e4]
+1:import { useState } from 'react'
+2:
+3:const NAV_LINKS = ['Services', 'Projects', 'Process', 'About', 'Contact']
+4:
+5:const STATS = [
+6:  { value: '47', label: 'Years Operating', unit: 'YRS' },
+7:  { value: '1,240', label: 'Projects Completed', unit: 'PROJ' },
+8:  { value: '380', label: 'Engineers & Workers', unit: 'STAFF' },
+9:  { value: '22', label: 'Countries Served', unit: 'CTRY' },
+10:]
+11:
+12:const SERVICES = [
+13:  {
+14:    num: '01',
+15:    title: 'Structural Steel Fabrication',
+16:    desc: 'Custom-engineered steel components for commercial, industrial, and infrastructure applications. Tolerances to ±0.5mm.',
+17:  },
+18:  {
+19:    num: '02',
+20:    title: 'Heavy Machinery Assembly',
+21:    desc: 'Full turnkey assembly of industrial press systems, conveyors, and automated production line components.',
+22:  },
+23:  {
+24:    num: '03',
+25:    title: 'Precision Casting',
+26:    desc: 'High-volume sand, investment, and die-casting operations across ferrous and non-ferrous alloys.',
+27:  },
+28:  {
+29:    num: '04',
+30:    title: 'Surface Treatment',
+31:    desc: 'Hot-dip galvanizing, powder coating, thermal spray, and industrial painting for maximum corrosion resistance.',
+32:  },
+33:  {
+34:    num: '05',
+35:    title: 'NDT & Quality Assurance',
+36:    desc: 'In-house non-destructive testing via UT, MT, PT, and radiographic inspection. ISO 9001:2015 certified.',
+37:  },
+38:  {
+39:    num: '06',
+40:    title: 'On-Site Installation',
+41:    desc: 'Erection and commissioning crews operating globally, including remote and confined-space environments.',
+42:  },
+43:]
+44:
+45:const PROJECTS = [
+46:  {
+47:    id: 1,
+48:    title: 'Danube Bridge Superstructure',
+49:    category: 'Infrastructure',
+50:    year: '2024',
+51:    img: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=800&h=600&fit=crop&auto=format',
+52:    alt: 'Industrial factory interior with steel structure',
+53:  },
+54:  {
+55:    id: 2,
+56:    title: 'Kraków Steel Mill Expansion',
+57:    category: 'Industrial',
+58:    year: '2023',
+59:    img: 'https://images.unsplash.com/photo-1474674556023-efef886fa147?w=800&h=600&fit=crop&auto=format',
+60:    alt: 'Heavy industrial crane lifting molten metal ladle in steel mill',
+61:  },
+62:  {
+63:    id: 3,
+64:    title: 'Hamburg Port Terminal Frame',
+65:    category: 'Marine Infrastructure',
+66:    year: '2023',
+67:    img: 'https://images.unsplash.com/photo-1735494033576-9c882e80504c?w=800&h=600&fit=crop&auto=format',
+68:    alt: 'Metal cutting machine with sparks',
+69:  },
+70:]
+71:
+72:const PROCESS_STEPS = [
+73:  { n: '01', title: 'Engineering Brief', desc: 'Load analysis, material selection, and tolerance specification against EN 1090 and project code requirements.' },
+74:  { n: '02', title: 'Design & Detailing', desc: '3D modelling in Tekla Structures with full CNC output and clash detection before a single plate is cut.' },
+75:  { n: '03', title: 'Fabrication', desc: 'Steel processed on our 6-axis plasma tables, welded by certified AWS/CWI welders, tracked batch-to-batch.' },
+76:  { n: '04', title: 'Inspection & Sign-Off', desc: 'Third-party witness testing, mill certs, weld maps, and full as-built documentation package.' },
+77:  { n: '05', title: 'Delivery & Erection', desc: 'Just-in-time logistics coordinated with site sequencing. Our crews handle anchor bolts through final bolt-up.' },
+78:]
+79:
+80:export default function App() {
+81:  const [menuOpen, setMenuOpen] = useState(false)
+82:  const [activeProject, setActiveProject] = useState(0)
+83:
+84:  return (
+85:    <div className="min-h-screen" style={{ backgroundColor: '#0d0d0d', color: '#e8e2d8' }}>
+86:
+87:      {/* ─── NAV ─── */}
+88:      <nav
+89:        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12"
+90:        style={{
+91:          height: '60px',
+92:          borderBottom: '1px solid #1e1e1e',
+93:          backgroundColor: 'rgba(13,13,13,0.92)',
+94:          backdropFilter: 'blur(12px)',
+95:        }}
+96:      >
+97:        <div className="flex items-center gap-3">
+98:          <div
+99:            className="w-7 h-7 flex items-center justify-center"
+100:            style={{ backgroundColor: '#c8650a' }}
+101:          >
+102:            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+103:              <path d="M2 12L7 2L12 12H2Z" fill="#0d0d0d" />
+104:            </svg>
+105:          </div>
+106:          <span
+107:            className="font-display tracking-widest text-sm font-700"
+108:            style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, letterSpacing: '0.15em' }}
+109:          >
+110:            STEELHAUS
+111:          </span>
+112:        </div>
+113:
+114:        <div className="hidden md:flex items-center gap-8">
+115:          {NAV_LINKS.map(link => (
+116:            <a
+117:              key={link}
+118:              href={`#${link.toLowerCase()}`}
+119:              className="text-xs tracking-widest transition-colors"
+120:              style={{
+121:                fontFamily: 'Space Mono, monospace',
+122:                color: '#7a7468',
+123:                letterSpacing: '0.12em',
+124:              }}
+125:              onMouseEnter={e => (e.currentTarget.style.color = '#e8e2d8')}
+126:              onMouseLeave={e => (e.currentTarget.style.color = '#7a7468')}
+127:            >
+128:              {link.toUpperCase()}
+129:            </a>
+130:          ))}
+131:          <a
+132:            href="#contact"
+133:            className="text-xs tracking-widest px-4 py-2 transition-colors"
+134:            style={{
+135:              fontFamily: 'Space Mono, monospace',
+136:              backgroundColor: '#c8650a',
+137:              color: '#0d0d0d',
+138:              fontWeight: 700,
+139:              letterSpacing: '0.1em',
+140:            }}
+141:          >
+142:            GET A QUOTE
+143:          </a>
+144:        </div>
+145:
+146:        <button
+147:          className="md:hidden p-2"
+148:          onClick={() => setMenuOpen(!menuOpen)}
+149:          style={{ color: '#e8e2d8' }}
+150:        >
+151:          <div className="w-5 h-px mb-1.5" style={{ backgroundColor: '#e8e2d8' }} />
+152:          <div className="w-5 h-px mb-1.5" style={{ backgroundColor: '#c8650a' }} />
+153:          <div className="w-5 h-px" style={{ backgroundColor: '#e8e2d8' }} />
+154:        </button>
+155:      </nav>
+156:
+157:      {menuOpen && (
+158:        <div
+159:          className="fixed inset-0 z-40 flex flex-col justify-center px-10 gap-6 md:hidden"
+160:          style={{ backgroundColor: '#0d0d0d', top: '60px' }}
+161:        >
+162:          {NAV_LINKS.map(link => (
+163:            <a
+164:              key={link}
+165:              href={`#${link.toLowerCase()}`}
+166:              className="text-4xl font-700"
+167:              style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800 }}
+168:              onClick={() => setMenuOpen(false)}
+169:            >
+170:              {link.toUpperCase()}
+171:            </a>
+172:          ))}
+173:        </div>
+174:      )}
+175:
+176:      {/* ─── HERO ─── */}
+177:      <section
+178:        className="relative overflow-hidden"
+179:        style={{ paddingTop: '60px', minHeight: '100svh' }}
+180:      >
+181:        <div
+182:          className="absolute inset-0 noise-overlay"
+183:          style={{
+184:            backgroundImage: `url('https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=1600&h=1000&fit=crop&auto=format')`,
+185:            backgroundSize: 'cover',
+186:            backgroundPosition: 'center',
+187:          }}
+188:        >
+189:          <div
+190:            className="absolute inset-0"
+191:            style={{
+192:              background: 'linear-gradient(to right, rgba(13,13,13,0.97) 0%, rgba(13,13,13,0.75) 55%, rgba(13,13,13,0.35) 100%)',
+193:            }}
+194:          />
+195:        </div>
+196:
+197:        <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 min-h-screen" style={{ minHeight: 'calc(100svh - 60px)' }}>
+198:          <div className="md:col-span-8 flex flex-col justify-end px-6 md:px-16 pb-16 md:pb-24">
+199:            <div
+200:              className="mb-6 inline-flex items-center gap-3 text-xs tracking-widest"
+201:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+202:            >
+203:              <span
+204:                className="inline-block w-8 h-px"
+205:                style={{ backgroundColor: '#c8650a' }}
+206:              />
+207:              EST. 1977 — STRUCTURAL & INDUSTRIAL FABRICATION
+208:            </div>
+209:
+210:            <h1
+211:              className="font-display uppercase leading-none mb-6"
+212:              style={{
+213:                fontFamily: 'Barlow Condensed, sans-serif',
+214:                fontWeight: 900,
+215:                fontSize: 'clamp(56px, 11vw, 140px)',
+216:                letterSpacing: '-0.01em',
+217:                lineHeight: 0.9,
+218:              }}
+219:            >
+220:              WE BUILD<br />
+221:              <span style={{ color: '#c8650a' }}>WHAT</span><br />
+222:              LASTS.
+223:            </h1>
+224:
+225:            <p
+226:              className="max-w-md mb-10 leading-relaxed"
+227:              style={{ color: '#a09790', fontSize: '16px', fontWeight: 300 }}
+228:            >
+229:              Heavy steel fabrication, precision casting, and on-site erection for
+230:              infrastructure and industrial projects across 22 countries.
+231:              ISO 9001:2015. EN 1090 EXC 4 certified.
+232:            </p>
+233:
+234:            <div className="flex flex-wrap gap-4">
+235:              <a
+236:                href="#projects"
+237:                className="inline-flex items-center gap-3 px-7 py-4 text-sm font-600 tracking-widest transition-colors"
+238:                style={{
+239:                  fontFamily: 'Space Mono, monospace',
+240:                  backgroundColor: '#c8650a',
+241:                  color: '#0d0d0d',
+242:                  fontWeight: 700,
+243:                  letterSpacing: '0.08em',
+244:                }}
+245:                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#e07b18')}
+246:                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#c8650a')}
+247:              >
+248:                VIEW PROJECTS
+249:                <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+250:                  <path d="M0 5H12M8 1L12 5L8 9" stroke="#0d0d0d" strokeWidth="1.5" />
+251:                </svg>
+252:              </a>
+253:              <a
+254:                href="#services"
+255:                className="inline-flex items-center gap-3 px-7 py-4 text-sm tracking-widest transition-colors"
+256:                style={{
+257:                  fontFamily: 'Space Mono, monospace',
+258:                  border: '1px solid #2a2a2a',
+259:                  color: '#e8e2d8',
+260:                  letterSpacing: '0.08em',
+261:                }}
+262:                onMouseEnter={e => (e.currentTarget.style.borderColor = '#c8650a')}
+263:                onMouseLeave={e => (e.currentTarget.style.borderColor = '#2a2a2a')}
+264:              >
+265:                OUR SERVICES
+266:              </a>
+267:            </div>
+268:          </div>
+269:
+270:          <div className="hidden md:flex md:col-span-4 flex-col justify-end pb-24 pr-12">
+271:            <div
+272:              className="border-l pl-8 flex flex-col gap-8"
+273:              style={{ borderColor: '#2a2a2a' }}
+274:            >
+275:              {STATS.map(stat => (
+276:                <div key={stat.label}>
+277:                  <div
+278:                    className="text-xs mb-1 tracking-widest"
+279:                    style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+280:                  >
+281:                    {stat.unit}
+282:                  </div>
+283:                  <div
+284:                    className="font-display leading-none mb-1"
+285:                    style={{
+286:                      fontFamily: 'Barlow Condensed, sans-serif',
+287:                      fontWeight: 800,
+288:                      fontSize: '38px',
+289:                    }}
+290:                  >
+291:                    {stat.value}
+292:                  </div>
+293:                  <div className="text-xs" style={{ color: '#7a7468', fontWeight: 300 }}>
+294:                    {stat.label}
+295:                  </div>
+296:                </div>
+297:              ))}
+298:            </div>
+299:          </div>
+300:        </div>
+301:
+302:        {/* scroll indicator */}
+303:        <div
+304:          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+305:          style={{ color: '#7a7468' }}
+306:        >
+307:          <span className="text-xs tracking-widest" style={{ fontFamily: 'Space Mono, monospace' }}>SCROLL</span>
+308:          <div className="w-px h-8 animate-pulse" style={{ backgroundColor: '#c8650a' }} />
+309:        </div>
+310:      </section>
+311:
+312:      {/* ─── STATS BAR (mobile) ─── */}
+313:      <div
+314:        className="md:hidden grid grid-cols-2 gap-px"
+315:        style={{ backgroundColor: '#2a2a2a' }}
+316:      >
+317:        {STATS.map(stat => (
+318:          <div key={stat.label} className="px-6 py-6" style={{ backgroundColor: '#0d0d0d' }}>
+319:            <div
+320:              className="text-xs mb-1 tracking-widest"
+321:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+322:            >
+323:              {stat.unit}
+324:            </div>
+325:            <div
+326:              className="font-display leading-none mb-1"
+327:              style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: '32px' }}
+328:            >
+329:              {stat.value}
+330:            </div>
+331:            <div className="text-xs" style={{ color: '#7a7468' }}>{stat.label}</div>
+332:          </div>
+333:        ))}
+334:      </div>
+335:
+336:      {/* ─── SERVICES ─── */}
+337:      <section
+338:        id="services"
+339:        className="grid-lines relative px-6 md:px-16 py-24 md:py-32"
+340:        style={{ borderTop: '1px solid #1e1e1e' }}
+341:      >
+342:        <div className="max-w-7xl mx-auto">
+343:          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+344:            <div className="md:col-span-4">
+345:              <div
+346:                className="text-xs tracking-widest mb-4"
+347:                style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+348:              >
+349:                — CAPABILITIES
+350:              </div>
+351:              <h2
+352:                className="font-display uppercase leading-none"
+353:                style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 'clamp(40px, 6vw, 72px)' }}
+354:              >
+355:                WHAT WE<br />DO BEST
+356:              </h2>
+357:            </div>
+358:            <div className="md:col-span-6 md:col-start-7 flex items-end">
+359:              <p style={{ color: '#7a7468', lineHeight: 1.7, fontWeight: 300, maxWidth: '420px' }}>
+360:                Six integrated disciplines under one roof. We handle projects from initial
+361:                engineering brief through final site commissioning — no handoffs, no gaps.
+362:              </p>
+363:            </div>
+364:          </div>
+365:
+366:          <div
+367:            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+368:            style={{ borderTop: '1px solid #2a2a2a', borderLeft: '1px solid #2a2a2a' }}
+369:          >
+370:            {SERVICES.map(svc => (
+371:              <div
+372:                key={svc.num}
+373:                className="service-card hover-lift px-8 py-10 cursor-default"
+374:                style={{ borderRight: '1px solid #2a2a2a', borderBottom: '1px solid #2a2a2a' }}
+375:              >
+376:                <div
+377:                  className="service-number font-display text-5xl font-800 leading-none mb-6 transition-colors"
+378:                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#232323' }}
+379:                >
+380:                  {svc.num}
+381:                </div>
+382:                <h3
+383:                  className="font-display uppercase text-xl font-700 mb-3"
+384:                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, letterSpacing: '0.04em' }}
+385:                >
+386:                  {svc.title}
+387:                </h3>
+388:                <p style={{ color: '#7a7468', fontSize: '14px', lineHeight: 1.7, fontWeight: 300 }}>
+389:                  {svc.desc}
+390:                </p>
+391:              </div>
+392:            ))}
+393:          </div>
+394:        </div>
+395:      </section>
+396:
+397:      {/* ─── PROJECTS ─── */}
+398:      <section
+399:        id="projects"
+400:        className="px-6 md:px-16 py-24 md:py-32"
+401:        style={{ borderTop: '1px solid #1e1e1e', backgroundColor: '#0a0a0a' }}
+402:      >
+403:        <div className="max-w-7xl mx-auto">
+404:          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+405:            <div>
+406:              <div
+407:                className="text-xs tracking-widest mb-4"
+408:                style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+409:              >
+410:                — SELECTED WORK
+411:              </div>
+412:              <h2
+413:                className="font-display uppercase leading-none"
+414:                style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 'clamp(40px, 6vw, 72px)' }}
+415:              >
+416:                RECENT<br />PROJECTS
+417:              </h2>
+418:            </div>
+419:            <a
+420:              href="#contact"
+421:              className="inline-flex items-center gap-2 text-sm tracking-widest transition-colors self-start md:self-auto"
+422:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a', letterSpacing: '0.08em' }}
+423:              onMouseEnter={e => (e.currentTarget.style.color = '#e07b18')}
+424:              onMouseLeave={e => (e.currentTarget.style.color = '#c8650a')}
+425:            >
+426:              ALL PROJECTS →
+427:            </a>
+428:          </div>
+429:
+430:          {/* tab selector */}
+431:          <div className="flex gap-1 mb-8">
+432:            {PROJECTS.map((p, i) => (
+433:              <button
+434:                key={p.id}
+435:                onClick={() => setActiveProject(i)}
+436:                className="px-5 py-2 text-xs tracking-widest transition-all"
+437:                style={{
+438:                  fontFamily: 'Space Mono, monospace',
+439:                  backgroundColor: activeProject === i ? '#c8650a' : '#151515',
+440:                  color: activeProject === i ? '#0d0d0d' : '#7a7468',
+441:                  border: '1px solid',
+442:                  borderColor: activeProject === i ? '#c8650a' : '#2a2a2a',
+443:                  letterSpacing: '0.08em',
+444:                  fontWeight: activeProject === i ? 700 : 400,
+445:                }}
+446:              >
+447:                {String(i + 1).padStart(2, '0')}
+448:              </button>
+449:            ))}
+450:          </div>
+451:
+452:          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+453:            {/* main image */}
+454:            <div className="lg:col-span-7 relative overflow-hidden" style={{ backgroundColor: '#151515' }}>
+455:              <img
+456:                src={PROJECTS[activeProject].img}
+457:                alt={PROJECTS[activeProject].alt}
+458:                className="w-full object-cover transition-opacity duration-300"
+459:                style={{ height: '460px' }}
+460:              />
+461:              <div
+462:                className="absolute bottom-0 left-0 right-0 p-6"
+463:                style={{ background: 'linear-gradient(to top, rgba(13,13,13,0.95) 0%, transparent 100%)' }}
+464:              >
+465:                <div
+466:                  className="text-xs tracking-widest mb-2"
+467:                  style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+468:                >
+469:                  {PROJECTS[activeProject].category} — {PROJECTS[activeProject].year}
+470:                </div>
+471:                <h3
+472:                  className="font-display uppercase text-2xl md:text-3xl font-800"
+473:                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800 }}
+474:                >
+475:                  {PROJECTS[activeProject].title}
+476:                </h3>
+477:              </div>
+478:            </div>
+479:
+480:            {/* project list */}
+481:            <div className="lg:col-span-5 flex flex-col gap-px" style={{ backgroundColor: '#2a2a2a' }}>
+482:              {PROJECTS.map((p, i) => (
+483:                <button
+484:                  key={p.id}
+485:                  className="text-left px-8 py-6 flex items-center justify-between transition-colors"
+486:                  style={{
+487:                    backgroundColor: activeProject === i ? '#1e1e1e' : '#0d0d0d',
+488:                  }}
+489:                  onClick={() => setActiveProject(i)}
+490:                  onMouseEnter={e => {
+491:                    if (activeProject !== i) e.currentTarget.style.backgroundColor = '#111'
+492:                  }}
+493:                  onMouseLeave={e => {
+494:                    if (activeProject !== i) e.currentTarget.style.backgroundColor = '#0d0d0d'
+495:                  }}
+496:                >
+497:                  <div>
+498:                    <div
+499:                      className="text-xs mb-2 tracking-widest"
+500:                      style={{
+501:                        fontFamily: 'Space Mono, monospace',
+502:                        color: activeProject === i ? '#c8650a' : '#3a3a3a',
+503:                      }}
+504:                    >
+505:                      {p.category}
+506:                    </div>
+507:                    <div
+508:                      className="font-display uppercase font-700 text-lg"
+509:                      style={{
+510:                        fontFamily: 'Barlow Condensed, sans-serif',
+511:                        fontWeight: 700,
+512:                        color: activeProject === i ? '#e8e2d8' : '#5a5550',
+513:                      }}
+514:                    >
+515:                      {p.title}
+516:                    </div>
+517:                  </div>
+518:                  {activeProject === i && (
+519:                    <div style={{ color: '#c8650a' }}>→</div>
+520:                  )}
+521:                </button>
+522:              ))}
+523:
+524:              <div
+525:                className="px-8 py-8 mt-auto"
+526:                style={{ backgroundColor: '#0d0d0d' }}
+527:              >
+528:                <p className="text-sm mb-4" style={{ color: '#7a7468', fontWeight: 300, lineHeight: 1.6 }}>
+529:                  Each project delivered on schedule and certified to the applicable structural
+530:                  execution class. Third-party inspection records available on request.
+531:                </p>
+532:                <a
+533:                  href="#contact"
+534:                  className="text-xs tracking-widest"
+535:                  style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a', letterSpacing: '0.1em' }}
+536:                >
+537:                  REQUEST PROJECT BRIEF →
+538:                </a>
+539:              </div>
+540:            </div>
+541:          </div>
+542:        </div>
+543:      </section>
+544:
+545:      {/* ─── PROCESS ─── */}
+546:      <section
+547:        id="process"
+548:        className="px-6 md:px-16 py-24 md:py-32"
+549:        style={{ borderTop: '1px solid #1e1e1e' }}
+550:      >
+551:        <div className="max-w-7xl mx-auto">
+552:          <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
+553:            <div className="md:col-span-4 md:sticky md:top-24 md:self-start">
+554:              <div
+555:                className="text-xs tracking-widest mb-4"
+556:                style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+557:              >
+558:                — HOW WE WORK
+559:              </div>
+560:              <h2
+561:                className="font-display uppercase leading-none mb-6"
+562:                style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 'clamp(40px, 5vw, 64px)' }}
+563:              >
+564:                THE<br />PROCESS
+565:              </h2>
+566:              <p style={{ color: '#7a7468', lineHeight: 1.7, fontWeight: 300 }}>
+567:                Five sequential phases from brief to bolt-up. Every hand-off is documented.
+568:                Nothing falls through a gap.
+569:              </p>
+570:            </div>
+571:
+572:            <div className="md:col-span-7 md:col-start-6">
+573:              {PROCESS_STEPS.map((step, i) => (
+574:                <div
+575:                  key={step.n}
+576:                  className="flex gap-6 pb-12"
+577:                  style={{
+578:                    borderBottom: i < PROCESS_STEPS.length - 1 ? '1px solid #1e1e1e' : 'none',
+579:                    paddingTop: i === 0 ? '0' : '48px',
+580:                  }}
+581:                >
+582:                  <div
+583:                    className="font-display font-800 shrink-0 pt-1"
+584:                    style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#c8650a', fontSize: '20px', minWidth: '32px' }}
+585:                  >
+586:                    {step.n}
+587:                  </div>
+588:                  <div>
+589:                    <h3
+590:                      className="font-display uppercase font-700 mb-3 text-xl"
+591:                      style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, letterSpacing: '0.04em' }}
+592:                    >
+593:                      {step.title}
+594:                    </h3>
+595:                    <p style={{ color: '#7a7468', lineHeight: 1.7, fontWeight: 300 }}>{step.desc}</p>
+596:                  </div>
+597:                </div>
+598:              ))}
+599:            </div>
+600:          </div>
+601:        </div>
+602:      </section>
+603:
+604:      {/* ─── QUOTE PULL ─── */}
+605:      <section
+606:        className="relative overflow-hidden"
+607:        style={{ backgroundColor: '#0a0a0a', borderTop: '1px solid #1e1e1e', borderBottom: '1px solid #1e1e1e' }}
+608:      >
+609:        <div
+610:          className="absolute left-0 top-0 bottom-0 w-2"
+611:          style={{ backgroundColor: '#c8650a' }}
+612:        />
+613:        <div className="px-12 md:px-24 py-20 md:py-28 max-w-5xl mx-auto">
+614:          <blockquote>
+615:            <p
+616:              className="font-display uppercase leading-tight mb-8"
+617:              style={{
+618:                fontFamily: 'Barlow Condensed, sans-serif',
+619:                fontWeight: 800,
+620:                fontSize: 'clamp(28px, 4.5vw, 58px)',
+621:                color: '#e8e2d8',
+622:              }}
+623:            >
+624:              "STEELHAUS DELIVERED A STRUCTURE WE WERE TOLD COULDN'T BE BUILT
+625:              ON SCHEDULE. THEY DID IT IN 14 WEEKS, UNDER BUDGET, WITH ZERO LTI."
+626:            </p>
+627:            <footer>
+628:              <div
+629:                className="text-xs tracking-widest mb-1"
+630:                style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+631:              >
+632:                MAREK KOWALSKI — PROJECT DIRECTOR
+633:              </div>
+634:              <div
+635:                className="text-xs tracking-widest"
+636:                style={{ fontFamily: 'Space Mono, monospace', color: '#3a3a3a' }}
+637:              >
+638:                VISTULA INFRASTRUCTURE GROUP, WARSAW
+639:              </div>
+640:            </footer>
+641:          </blockquote>
+642:        </div>
+643:      </section>
+644:
+645:      {/* ─── ABOUT STRIP ─── */}
+646:      <section
+647:        id="about"
+648:        className="px-6 md:px-16 py-24 md:py-32"
+649:      >
+650:        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+651:          <div className="md:col-span-5">
+652:            <div
+653:              className="text-xs tracking-widest mb-4"
+654:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+655:            >
+656:              — ABOUT THE FIRM
+657:            </div>
+658:            <h2
+659:              className="font-display uppercase leading-none"
+660:              style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 'clamp(40px, 5vw, 64px)' }}
+661:            >
+662:              BUILT FOR<br />HARD JOBS
+663:            </h2>
+664:          </div>
+665:          <div className="md:col-span-6 md:col-start-7 flex flex-col justify-center gap-6">
+666:            <p style={{ color: '#7a7468', lineHeight: 1.7, fontWeight: 300 }}>
+667:              Founded in Düsseldorf in 1977, Steelhaus began as a specialist in heavy
+668:              structural steelwork for German industrial clients. Over five decades we have
+669:              grown to 380 people operating out of four fabrication facilities in Germany,
+670:              Poland, and the Czech Republic.
+671:            </p>
+672:            <p style={{ color: '#7a7468', lineHeight: 1.7, fontWeight: 300 }}>
+673:              We are independently certified to EN 1090 EXC 4 — the highest structural
+674:              execution class — and hold current AWS D1.1, AWS D1.5, and ISO 15614
+675:              welding procedure qualifications.
+676:            </p>
+677:            <div className="flex gap-8 pt-4">
+678:              <div>
+679:                <div
+680:                  className="font-display font-800 text-3xl mb-1"
+681:                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#c8650a' }}
+682:                >
+683:                  EN 1090
+684:                </div>
+685:                <div className="text-xs" style={{ color: '#5a5550', fontFamily: 'Space Mono, monospace' }}>EXC 4 CERTIFIED</div>
+686:              </div>
+687:              <div>
+688:                <div
+689:                  className="font-display font-800 text-3xl mb-1"
+690:                  style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#c8650a' }}
+691:                >
+692:                  ISO 9001
+693:                </div>
+694:                <div className="text-xs" style={{ color: '#5a5550', fontFamily: 'Space Mono, monospace' }}>:2015 CERTIFIED</div>
+695:              </div>
+696:            </div>
+697:          </div>
+698:        </div>
+699:      </section>
+700:
+701:      {/* ─── CTA ─── */}
+702:      <section
+703:        id="contact"
+704:        className="relative overflow-hidden px-6 md:px-16 py-24 md:py-32"
+705:        style={{ backgroundColor: '#c8650a' }}
+706:      >
+707:        <div
+708:          className="absolute inset-0 opacity-10"
+709:          style={{
+710:            backgroundImage: 'repeating-linear-gradient(45deg, #0d0d0d 0, #0d0d0d 1px, transparent 0, transparent 50%)',
+711:            backgroundSize: '12px 12px',
+712:          }}
+713:        />
+714:        <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+715:          <div className="md:col-span-7">
+716:            <h2
+717:              className="font-display uppercase leading-none mb-4"
+718:              style={{
+719:                fontFamily: 'Barlow Condensed, sans-serif',
+720:                fontWeight: 900,
+721:                fontSize: 'clamp(44px, 7vw, 96px)',
+722:                color: '#0d0d0d',
+723:              }}
+724:            >
+725:              START YOUR<br />PROJECT.
+726:            </h2>
+727:            <p style={{ color: 'rgba(13,13,13,0.65)', fontWeight: 300, maxWidth: '400px', lineHeight: 1.7 }}>
+728:              Send us your drawings, scope, and schedule. We'll come back with a fixed-price
+729:              proposal within 5 working days.
+730:            </p>
+731:          </div>
+732:          <div className="md:col-span-4 md:col-start-9 flex flex-col gap-4">
+733:            <input
+734:              type="text"
+735:              placeholder="Company Name"
+736:              className="w-full px-5 py-4 text-sm"
+737:              style={{
+738:                backgroundColor: 'rgba(13,13,13,0.15)',
+739:                border: '1px solid rgba(13,13,13,0.25)',
+740:                color: '#0d0d0d',
+741:                fontFamily: 'Barlow, sans-serif',
+742:                outline: 'none',
+743:              }}
+744:            />
+745:            <input
+746:              type="email"
+747:              placeholder="Email Address"
+748:              className="w-full px-5 py-4 text-sm"
+749:              style={{
+750:                backgroundColor: 'rgba(13,13,13,0.15)',
+751:                border: '1px solid rgba(13,13,13,0.25)',
+752:                color: '#0d0d0d',
+753:                fontFamily: 'Barlow, sans-serif',
+754:                outline: 'none',
+755:              }}
+756:            />
+757:            <textarea
+758:              rows={3}
+759:              placeholder="Brief project description"
+760:              className="w-full px-5 py-4 text-sm resize-none"
+761:              style={{
+762:                backgroundColor: 'rgba(13,13,13,0.15)',
+763:                border: '1px solid rgba(13,13,13,0.25)',
+764:                color: '#0d0d0d',
+765:                fontFamily: 'Barlow, sans-serif',
+766:                outline: 'none',
+767:              }}
+768:            />
+769:            <button
+770:              className="w-full py-4 text-sm font-700 tracking-widest transition-colors"
+771:              style={{
+772:                fontFamily: 'Space Mono, monospace',
+773:                backgroundColor: '#0d0d0d',
+774:                color: '#e8e2d8',
+775:                fontWeight: 700,
+776:                letterSpacing: '0.1em',
+777:              }}
+778:              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e1e1e')}
+779:              onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#0d0d0d')}
+780:            >
+781:              SEND BRIEF →
+782:            </button>
+783:          </div>
+784:        </div>
+785:      </section>
+786:
+787:      {/* ─── FOOTER ─── */}
+788:      <footer
+789:        className="px-6 md:px-16 py-12"
+790:        style={{ backgroundColor: '#0a0a0a', borderTop: '1px solid #1e1e1e' }}
+791:      >
+792:        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10">
+793:          <div className="md:col-span-4">
+794:            <div className="flex items-center gap-3 mb-4">
+795:              <div
+796:                className="w-7 h-7 flex items-center justify-center"
+797:                style={{ backgroundColor: '#c8650a' }}
+798:              >
+799:                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+800:                  <path d="M2 12L7 2L12 12H2Z" fill="#0d0d0d" />
+801:                </svg>
+802:              </div>
+803:              <span
+804:                className="font-display tracking-widest text-sm font-700"
+805:                style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, letterSpacing: '0.15em' }}
+806:              >
+807:                STEELHAUS
+808:              </span>
+809:            </div>
+810:            <p className="text-xs leading-relaxed" style={{ color: '#3a3a3a', fontWeight: 300 }}>
+811:              Steelhaus GmbH<br />
+812:              Industriestraße 44<br />
+813:              40231 Düsseldorf, Germany<br />
+814:              <br />
+815:              +49 211 640 8900<br />
+816:              projects@steelhaus.de
+817:            </p>
+818:          </div>
+819:
+820:          <div className="md:col-span-2 md:col-start-6">
+821:            <div
+822:              className="text-xs tracking-widest mb-4"
+823:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+824:            >
+825:              SERVICES
+826:            </div>
+827:            {['Steel Fabrication', 'Heavy Assembly', 'Precision Casting', 'Surface Treatment', 'NDT & QA', 'Installation'].map(s => (
+828:              <a
+829:                key={s}
+830:                href="#services"
+831:                className="block text-xs mb-2 transition-colors"
+832:                style={{ color: '#3a3a3a', fontWeight: 300 }}
+833:                onMouseEnter={e => (e.currentTarget.style.color = '#e8e2d8')}
+834:                onMouseLeave={e => (e.currentTarget.style.color = '#3a3a3a')}
+835:              >
+836:                {s}
+837:              </a>
+838:            ))}
+839:          </div>
+840:
+841:          <div className="md:col-span-2">
+842:            <div
+843:              className="text-xs tracking-widest mb-4"
+844:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+845:            >
+846:              COMPANY
+847:            </div>
+848:            {['About', 'Projects', 'Certifications', 'Careers', 'Contact'].map(s => (
+849:              <a
+850:                key={s}
+851:                href={`#${s.toLowerCase()}`}
+852:                className="block text-xs mb-2 transition-colors"
+853:                style={{ color: '#3a3a3a', fontWeight: 300 }}
+854:                onMouseEnter={e => (e.currentTarget.style.color = '#e8e2d8')}
+855:                onMouseLeave={e => (e.currentTarget.style.color = '#3a3a3a')}
+856:              >
+857:                {s}
+858:              </a>
+859:            ))}
+860:          </div>
+861:
+862:          <div className="md:col-span-3 md:col-start-10">
+863:            <div
+864:              className="text-xs tracking-widest mb-4"
+865:              style={{ fontFamily: 'Space Mono, monospace', color: '#c8650a' }}
+866:            >
+867:              CERTIFICATIONS
+868:            </div>
+869:            {['EN 1090-2 EXC 4', 'ISO 9001:2015', 'AWS D1.1 / D1.5', 'ISO 15614-1', 'DNV-GL Approved'].map(s => (
+870:              <div key={s} className="flex items-center gap-2 mb-2">
+871:                <div className="w-1 h-1 shrink-0" style={{ backgroundColor: '#c8650a' }} />
+872:                <span className="text-xs" style={{ color: '#3a3a3a', fontFamily: 'Space Mono, monospace' }}>{s}</span>
+873:              </div>
+874:            ))}
+875:          </div>
+876:        </div>
+877:
+878:        <div
+879:          className="max-w-7xl mx-auto mt-12 pt-6 flex flex-col md:flex-row justify-between gap-4"
+880:          style={{ borderTop: '1px solid #1a1a1a' }}
+881:        >
+882:          <span className="text-xs" style={{ color: '#2a2a2a', fontFamily: 'Space Mono, monospace' }}>
+883:            © 2026 STEELHAUS GMBH. ALL RIGHTS RESERVED.
+884:          </span>
+885:          <span className="text-xs" style={{ color: '#2a2a2a', fontFamily: 'Space Mono, monospace' }}>
+886:            DÜSSELDORF — KRAKÓW — BRNO
+887:          </span>
+888:        </div>
+889:      </footer>
+890:
+891:    </div>
+892:  )
+893:}
+
+(End of file — 893 lines.)

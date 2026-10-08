@@ -1,0 +1,10 @@
+{
+  "description": "Designed for industrial businesses, this modern website UI enhances user experience with intuitive navigation and visually appealing layouts, driving engagement and efficiency.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
